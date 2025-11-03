@@ -46,3 +46,8 @@ Thumbs.db
 # Env
 .env
 .env.local
+
+# Documentation (keep private)
+SCIENTIFIC_BLOG_POST.md
+PROJECT_README.md
+SUBMISSION_SUMMARY.md
