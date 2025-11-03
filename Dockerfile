@@ -16,16 +16,15 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
-COPY *.py ./
-COPY *.sh ./
+COPY src/ ./src/
+COPY scripts/ ./scripts/
 COPY data/ ./data/
 COPY models/ ./models/
 COPY figures/ ./figures/
-COPY archive/ ./archive/
+COPY requirements.txt ./
 
 # Make shell scripts executable
-RUN chmod +x *.sh 2>/dev/null || true
-RUN chmod +x *.py 2>/dev/null || true
+RUN chmod +x scripts/*.sh 2>/dev/null || true
 
 # Create necessary directories
 RUN mkdir -p data/raw/noaa data/processed data/features models figures
@@ -35,4 +34,4 @@ ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 
 # Default command
-CMD ["python", "train_with_tidal.py"]
+CMD ["python", "src/modeling/train_with_tidal.py"]

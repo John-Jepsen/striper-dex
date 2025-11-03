@@ -1,0 +1,14 @@
+{
+  "model_type": "XGBoost with Tidal Features",
+  "train_r2": 0.930855043380552,
+  "test_r2": 0.7234127357028077,
+  "rmse": 12.755354670261744,
+  "mae": 9.50540006529626,
+  "num_features": 131,
+  "num_trees": 46,
+  "training_samples": 9012,
+  "test_samples": 2254,
+  "improvement_vs_original": "+136.4%",
+  "improvement_from_tidal": "+2.0%",
+  "trained_date": "2025-11-03T07:37:08.552036"
+}

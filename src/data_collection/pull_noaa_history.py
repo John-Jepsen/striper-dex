@@ -11,7 +11,11 @@ from pathlib import Path
 from typing import Iterable, Iterator, List, Sequence, Tuple
 import urllib.error
 
-from sst_utils import (
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
+from src.utils.sst_utils import (
     fetch_hourly_csv,
     morning_snapshots,
     parse_hourly_rows,

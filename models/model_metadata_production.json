@@ -1,0 +1,13 @@
+{
+  "model_type": "XGBoost Regressor",
+  "train_r2": 0.9327191698979738,
+  "test_r2": 0.7086699531823222,
+  "rmse": 13.584220123063515,
+  "mae": 10.207333275754307,
+  "num_features": 97,
+  "num_trees": 48,
+  "training_samples": 9012,
+  "test_samples": 2254,
+  "improvement_vs_original": "+131.6%",
+  "trained_date": "2025-11-02T22:44:05.695544"
+}
