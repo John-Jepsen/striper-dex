@@ -1,0 +1,184 @@
+services:
+  # Main training service
+  train:
+    build: .
+    container_name: bay-water-temps-train
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./figures:/app/figures
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: python train_with_tidal.py
+
+  # Data collection service
+  collect-data:
+    build: .
+    container_name: bay-water-temps-collect
+    volumes:
+      - ./data:/app/data
+    environment:
+      - PYTHONUNBUFFERED=1
+    profiles:
+      - data-collection
+    command: python pull_noaa_history.py
+
+  # Buoy temperature collection
+  collect-buoy:
+    build: .
+    container_name: bay-water-temps-buoy
+    volumes:
+      - ./data:/app/data
+    environment:
+      - PYTHONUNBUFFERED=1
+    profiles:
+      - data-collection
+    command: python buoy-temps.py
+
+  # Weather data collection
+  collect-weather:
+    build: .
+    container_name: bay-water-temps-weather
+    volumes:
+      - ./data:/app/data
+    environment:
+      - PYTHONUNBUFFERED=1
+    profiles:
+      - data-collection
+    command: python collect_weather_data.py
+
+  # Tidal data collection
+  collect-tidal:
+    build: .
+    container_name: bay-water-temps-tidal
+    volumes:
+      - ./data:/app/data
+    environment:
+      - PYTHONUNBUFFERED=1
+    profiles:
+      - data-collection
+    command: python collect_tidal_data.py
+
+  # Barometric pressure collection
+  collect-pressure:
+    build: .
+    container_name: bay-water-temps-pressure
+    volumes:
+      - ./data:/app/data
+    environment:
+      - PYTHONUNBUFFERED=1
+    profiles:
+      - data-collection
+    command: python collect_barometric_pressure.py
+
+  # Feature engineering
+  features:
+    build: .
+    container_name: bay-water-temps-features
+    volumes:
+      - ./data:/app/data
+    environment:
+      - PYTHONUNBUFFERED=1
+    profiles:
+      - pipeline
+    command: python feature_engineering.py
+
+  # Model comparison
+  compare:
+    build: .
+    container_name: bay-water-temps-compare
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./figures:/app/figures
+    environment:
+      - PYTHONUNBUFFERED=1
+    profiles:
+      - analysis
+    command: python compare_models.py
+
+  # Visualization
+  visualize:
+    build: .
+    container_name: bay-water-temps-visualize
+    volumes:
+      - ./data:/app/data
+      - ./figures:/app/figures
+    environment:
+      - PYTHONUNBUFFERED=1
+    profiles:
+      - analysis
+    command: python visualize_buoy_temps.py
+
+  # Model behavior visualization
+  visualize-model:
+    build: .
+    container_name: bay-water-temps-visualize-model
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./figures:/app/figures
+    environment:
+      - PYTHONUNBUFFERED=1
+    profiles:
+      - analysis
+    command: python visualize_model_behavior.py
+
+  # Fishing forecast
+  forecast:
+    build: .
+    container_name: bay-water-temps-forecast
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+    environment:
+      - PYTHONUNBUFFERED=1
+    profiles:
+      - prediction
+    command: python fishing_forecast.py
+
+  # Predict conditions
+  predict:
+    build: .
+    container_name: bay-water-temps-predict
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+    environment:
+      - PYTHONUNBUFFERED=1
+    profiles:
+      - prediction
+    command: python predict_fishing_conditions.py
+
+  # Production model training
+  train-production:
+    build: .
+    container_name: bay-water-temps-train-prod
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./figures:/app/figures
+    environment:
+      - PYTHONUNBUFFERED=1
+    profiles:
+      - production
+    command: python train_production_model.py
+
+  # Full pipeline
+  pipeline:
+    build: .
+    container_name: bay-water-temps-pipeline
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./figures:/app/figures
+    environment:
+      - PYTHONUNBUFFERED=1
+    profiles:
+      - pipeline
+    command: python run_enhanced_pipeline.py
+
+volumes:
+  data:
+  models:
+  figures:
