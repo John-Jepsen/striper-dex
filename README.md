@@ -14,6 +14,13 @@
 
 ## Quick Start
 
+### Docker (Recommended)
+```bash
+make build && make train
+# Containerized, no setup needed
+```
+
+### Python
 ```bash
 python train_with_tidal.py
 # R² = 0.72, 46 trees, 131 features
