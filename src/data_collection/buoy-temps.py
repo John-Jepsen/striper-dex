@@ -10,8 +10,10 @@ import argparse
 import datetime as dt
 import sys
 import urllib.error
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from sst_utils import (
+from src.utils.sst_utils import (
     fetch_hourly_csv,
     morning_snapshots,
     parse_hourly_rows,

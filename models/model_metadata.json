@@ -1,0 +1,31 @@
+{
+  "model_type": "Gradient Boosting",
+  "r2_score": 0.30546058966175893,
+  "training_samples": 9012,
+  "test_samples": 2254,
+  "trained_date": "2025-11-02T22:15:23.265443",
+  "feature_names": [
+    "pressure_mb",
+    "pressure_change_6h",
+    "pressure_change_24h",
+    "temp_change_1d",
+    "temp_change_7d",
+    "temp_rolling_mean_7d",
+    "temp_rolling_std_7d",
+    "temp_anomaly_7d",
+    "temp_volatility_7d",
+    "pressure_stability_6h",
+    "hour",
+    "day_of_week",
+    "month",
+    "hour_sin",
+    "hour_cos",
+    "month_sin",
+    "month_cos",
+    "is_early_morning",
+    "is_weekend",
+    "is_high_pressure",
+    "is_low_pressure",
+    "temp_in_optimal_range"
+  ]
+}
