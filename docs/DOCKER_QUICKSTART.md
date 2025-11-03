@@ -1,4 +1,4 @@
-# 🐳 Docker Quick Start
+# Docker Quick Start
 
 ## Instant Setup
 
@@ -25,10 +25,10 @@ make shell             # Open bash in container
 
 ## What You Get
 
-✅ **Containerized environment** - No Python setup needed  
-✅ **Data persistence** - All data/models saved to host  
-✅ **Multi-service** - Train, predict, visualize separately  
-✅ **Production ready** - Consistent across environments
+- **Containerized environment** - No Python setup needed  
+- **Data persistence** - All data/models saved to host  
+- **Multi-service** - Train, predict, visualize separately  
+- **Production ready** - Consistent across environments
 
 ---
 

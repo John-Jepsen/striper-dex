@@ -2,7 +2,7 @@
 
 Machine learning-powered fishing forecast system using 30+ years of NOAA oceanographic data.
 
-## 🎣 Quick Start
+## Quick Start
 
 ### Local (Virtual Environment)
 ```bash
@@ -29,7 +29,7 @@ make forecast
 make pipeline
 ```
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 bay-water-temps/
@@ -68,7 +68,7 @@ bay-water-temps/
 └── requirements.txt
 ```
 
-## 🚀 Available Commands
+## Available Commands
 
 ### Make Commands (Docker)
 ```bash
@@ -89,7 +89,7 @@ python src/data_collection/pull_noaa_history.py         # Pull historical data
 python src/visualization/visualize_buoy_temps.py        # Create plots
 ```
 
-## 📊 Features
+## Features
 
 - **30+ years of NOAA data** (1993-present)
 - **Random Forest ML model** with temperature forecasting
@@ -98,21 +98,21 @@ python src/visualization/visualize_buoy_temps.py        # Create plots
 - **Docker containerization** for reproducibility
 - **Automated pipeline** for daily updates
 
-## 🎯 Model Performance
+## Model Performance
 
 - **Temperature Forecast R²:** ~0.85
 - **Feature Importance:** Temperature lags, rolling means, cyclical seasonality
 - **Prediction Window:** 7 days
 - **Target Species:** 6 Monterey Bay species with optimal temp ranges
 
-## 📚 Documentation
+## Documentation
 
 See `/docs` for:
 - `COMPLETE_GUIDE.md` - Full usage guide
 - `DOCKER_QUICKSTART.md` - Docker setup
 - `SCIENTIFIC_REPORT.md` - Model methodology
 
-## 🔧 Development
+## Development
 
 ```bash
 # Run tests
@@ -125,11 +125,11 @@ flake8 src/
 mypy src/
 ```
 
-## 📝 License
+## License
 
 MIT License - See LICENSE file for details.
 
-## 🙏 Data Sources
+## Data Sources
 
 - NOAA CO-OPS API (water temperature, tides, pressure)
 - Historical SST archive (1993-present)

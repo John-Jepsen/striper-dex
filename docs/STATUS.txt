@@ -19,5 +19,5 @@ QUICK START
 -----------
 python train_with_tidal.py
 
-STATUS: Production-ready ✅
+STATUS: Production-ready
 ================================================================================

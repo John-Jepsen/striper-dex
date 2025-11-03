@@ -228,10 +228,10 @@ Tree 46: "If dawn + flood tide? +12"
 ### Biologically Valid
 
 Top features match striped bass biology:
-- ✅ Migratory species (seasonal patterns dominate)
-- ✅ Temperature preferences (60-70°F optimal)
-- ✅ Pressure sensitivity (falling = feeding)
-- ✅ Tidal activity (moving water = active)
+- Migratory species (seasonal patterns dominate)
+- Temperature preferences (60-70°F optimal)
+- Pressure sensitivity (falling = feeding)
+- Tidal activity (moving water = active)
 
 ---
 
@@ -310,4 +310,4 @@ cat models/model_metadata_with_tidal.json
 head -20 models/feature_importance_with_tidal.csv
 ```
 
-**That's it. Simple. Concise. Complete.** ✅
+**That's it. Simple. Concise. Complete.**

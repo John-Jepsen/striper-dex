@@ -1,4 +1,4 @@
-# 🐳 Docker Setup Complete
+# Docker Setup Complete
 
 ## What Was Created
 
@@ -106,13 +106,13 @@ make train-prod
 
 ## Key Features
 
-✅ **Zero Python Setup** - Everything in containers  
-✅ **Consistent Environments** - Same everywhere  
-✅ **Data Persistence** - Volumes mapped to host  
-✅ **Service Isolation** - Train/predict/visualize separately  
-✅ **Easy Commands** - Makefile shortcuts  
-✅ **Profile-based** - Organize related services  
-✅ **Production Ready** - Deploy anywhere Docker runs
+- **Zero Python Setup** - Everything in containers  
+- **Consistent Environments** - Same everywhere  
+- **Data Persistence** - Volumes mapped to host  
+- **Service Isolation** - Train/predict/visualize separately  
+- **Easy Commands** - Makefile shortcuts  
+- **Profile-based** - Organize related services  
+- **Production Ready** - Deploy anywhere Docker runs
 
 ---
 
@@ -205,6 +205,6 @@ c843058 Add Docker Compose configuration
 
 ---
 
-**Status**: ✅ Production Ready
+**Status**: Production Ready
 
 The project now supports both native Python and Docker execution, with Docker being the recommended approach for consistency and ease of deployment.
