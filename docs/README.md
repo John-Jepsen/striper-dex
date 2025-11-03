@@ -116,12 +116,12 @@ data/processed/9413450_tidal_data.csv  # 161k tidal records
 
 ## Key Learnings
 
-✅ XGBoost beats linear (finds interactions)  
-✅ Tidal patterns matter (+1.7%)  
-✅ Seasonality dominates (51% importance)  
-✅ More variance in target = better learning  
-✅ Domain knowledge essential
+- XGBoost beats linear (finds interactions)  
+- Tidal patterns matter (+1.7%)  
+- Seasonality dominates (51% importance)  
+- More variance in target = better learning  
+- Domain knowledge essential
 
 ---
 
-**Status**: Production-ready. Tidal integrated. Documentation condensed. ✅
+**Status**: Production-ready. Tidal integrated. Documentation condensed.
