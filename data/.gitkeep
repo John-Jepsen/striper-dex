@@ -1,0 +1,4 @@
+# Data directory structure
+# - raw/: Raw data from NOAA and other sources
+# - processed/: Cleaned and processed data
+# - features/: Engineered features for ML

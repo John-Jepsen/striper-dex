@@ -1,0 +1,11 @@
+{
+  "model_type": "XGBoost",
+  "r2_score": 0.6393988757843396,
+  "rmse": 13.405284543584594,
+  "mae": 10.118298070577257,
+  "training_samples": 9012,
+  "test_samples": 2254,
+  "num_features": 78,
+  "improvement_mode": "full",
+  "trained_date": "2025-11-02T22:29:04.235738"
+}
