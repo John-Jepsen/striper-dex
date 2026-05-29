@@ -2,20 +2,7 @@
 
 Machine learning-powered fishing forecast system using 30+ years of NOAA oceanographic data.
 
-## Quick Start
-
-### Local (Virtual Environment)
-```bash
-# Create and activate virtual environment
-python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run the forecast
-python forecast.py
-```
+<img width="731" height="470" alt="image" src="https://github.com/user-attachments/assets/c38f8776-d005-48ab-b106-72540ed21bc0" />
 
 ### Docker (Recommended for Production)
 ```bash
@@ -80,15 +67,6 @@ make collect           # Collect all NOAA data
 make visualize         # Generate visualizations
 make pipeline          # Run full pipeline
 ```
-
-### Direct Python (Local venv)
-```bash
-python forecast.py                                      # Quick forecast
-python src/modeling/fishing_forecast.py --forecast-days 7
-python src/data_collection/pull_noaa_history.py         # Pull historical data
-python src/visualization/visualize_buoy_temps.py        # Create plots
-```
-
 ## Features
 
 - **30+ years of NOAA data** (1993-present)
