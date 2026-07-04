@@ -10,6 +10,7 @@ Usage:
 """
 
 import argparse
+import subprocess
 from pathlib import Path
 import pandas as pd
 import numpy as np
@@ -26,6 +27,68 @@ except ImportError:
     print("ERROR: XGBoost not installed! Install with: pip install xgboost")
     import sys
     sys.exit(1)
+
+
+def _git_sha() -> str:
+    try:
+        return (
+            subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD'], text=True)
+            .strip()
+            .split('\n')[0]
+        )
+    except Exception:
+        return 'nogit'
+
+
+def log_to_mlflow(
+    args: argparse.Namespace,
+    result: dict,
+    feature_names: list,
+    n_train: int,
+    n_test: int,
+    artifact_paths: list,
+    input_example: pd.DataFrame,
+) -> None:
+    import mlflow
+
+    model = result['model']
+    mlflow.set_experiment('bay-water-temps')
+    run_name = f"tidal_{pd.Timestamp.now().strftime('%Y%m%d_%H%M%S')}_{_git_sha()}"
+    with mlflow.start_run(run_name=run_name):
+        mlflow.set_tags({
+            'git_sha': _git_sha(),
+            'script': 'train_with_tidal.py',
+            'model': 'xgboost',
+        })
+        mlflow.log_params({
+            'features': str(args.features),
+            'tidal': str(args.tidal),
+            'n_features': len(feature_names),
+            'train_fraction': 0.8,
+            'training_samples': n_train,
+            'test_samples': n_test,
+            'n_estimators': model.n_estimators,
+            'max_depth': model.max_depth,
+            'learning_rate': model.learning_rate,
+            'subsample': model.subsample,
+            'colsample_bytree': model.colsample_bytree,
+            'colsample_bylevel': model.colsample_bylevel,
+            'reg_alpha': model.reg_alpha,
+            'reg_lambda': model.reg_lambda,
+            'gamma': model.gamma,
+            'early_stopping_rounds': model.early_stopping_rounds,
+            'random_state': model.random_state,
+        })
+        mlflow.log_metrics({
+            'train_r2': result['train_r2'],
+            'test_r2': result['test_r2'],
+            'rmse': result['rmse'],
+            'mae': result['mae'],
+            'num_trees': result['best_iteration'] + 1,
+        })
+        for path in artifact_paths:
+            mlflow.log_artifact(str(path))
+        mlflow.xgboost.log_model(model, name='model', input_example=input_example)
 
 
 def load_and_merge_tidal_data(features_df: pd.DataFrame, tidal_path: Path) -> pd.DataFrame:
@@ -493,7 +556,12 @@ def main(argv=None):
         default=Path('models'),
         help='Output directory'
     )
-    
+    parser.add_argument(
+        '--mlflow',
+        action='store_true',
+        help='Log this run to MLflow'
+    )
+
     args = parser.parse_args(argv)
     
     print("="*70)
@@ -594,9 +662,23 @@ def main(argv=None):
     print(f"Model:       {model_path}")
     print(f"Metadata:    {metadata_path}")
     print(f"Importance:  {importance_path}")
-    
+
+    if args.mlflow:
+        try:
+            log_to_mlflow(
+                args,
+                result,
+                feature_names,
+                len(X_train),
+                len(X_test),
+                [model_path, metadata_path, importance_path],
+                X_test.iloc[:5],
+            )
+        except Exception as exc:
+            print(f"MLflow logging skipped: {exc}")
+
     print(f"\n✅ COMPLETE: Model with tidal features trained successfully!")
-    
+
     return 0
 
 

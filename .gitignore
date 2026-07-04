@@ -29,6 +29,10 @@ wheels/
 *.pkl
 *.h5
 
+# MLflow
+mlruns/
+mlflow.db
+
 # IDE
 .vscode/
 .idea/
