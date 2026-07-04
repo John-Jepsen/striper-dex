@@ -17,6 +17,8 @@ from __future__ import annotations
 
 import argparse
 import json
+import subprocess
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 import warnings
@@ -430,6 +432,96 @@ def save_model(model, scaler, feature_names: List[str], metadata: Dict, output_d
     print(f"\n✅ Model saved to {output_dir}/")
 
 
+def _git_sha() -> str:
+    try:
+        return (
+            subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD'], text=True)
+            .strip()
+            .split('\n')[0]
+        )
+    except Exception:
+        return 'nogit'
+
+
+def log_to_mlflow(
+    args,
+    feature_names: List[str],
+    n_train: int,
+    n_test: int,
+    results: Dict[str, Dict[str, Any]],
+    best_key: str,
+    scaler,
+    X_test: pd.DataFrame,
+    output_dir: Path,
+) -> None:
+    import mlflow
+    from sklearn.pipeline import Pipeline
+
+    stamp = datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')
+    mlflow.set_experiment('bay-water-temps')
+    with mlflow.start_run(run_name=f'fishing_{stamp}_{_git_sha()}'):
+        mlflow.set_tags({
+            'git_sha': _git_sha(),
+            'script': 'train_fishing_model.py',
+            'target': 'synthetic_fishing_quality_score',
+        })
+        mlflow.log_params({
+            'features': str(args.features),
+            'models': args.model,
+            'test_size': args.test_size,
+            'n_features': len(feature_names),
+            'n_train': n_train,
+            'n_test': n_test,
+            'best_model': results[best_key]['name'],
+        })
+
+        for key, info in results.items():
+            with mlflow.start_run(run_name=key, nested=True):
+                mlflow.set_tag('model', info['name'])
+                params: Dict[str, Any] = {}
+                if key == 'mlr':
+                    params['variant'] = info['name']
+                    alpha = getattr(info['model'], 'alpha', None)
+                    if alpha is not None:
+                        params['alpha'] = alpha
+                elif key == 'rf':
+                    params.update(info.get('best_params', {}))
+                elif key == 'gbm':
+                    model = info['model']
+                    params.update({
+                        'n_estimators': model.n_estimators,
+                        'learning_rate': model.learning_rate,
+                        'max_depth': model.max_depth,
+                    })
+                if params:
+                    mlflow.log_params(params)
+                mlflow.log_metric('test_r2', info['r2'])
+
+        mlflow.log_metric('test_r2', results[best_key]['r2'])
+
+        plot_titles = {
+            'mlr': 'Multi-Linear Regression',
+            'rf': 'Random Forest',
+            'gbm': 'Gradient Boosting',
+        }
+        artifact_names = ['model_metadata.json', 'feature_importance.png']
+        for key in results:
+            slug = plot_titles[key].lower().replace(' ', '_')
+            artifact_names.append(f'{slug}_predictions.png')
+            artifact_names.append(f'{slug}_residuals.png')
+        for fname in artifact_names:
+            path = output_dir / fname
+            if path.exists():
+                mlflow.log_artifact(str(path))
+
+        best_model = results[best_key]['model']
+        if best_key == 'mlr':
+            logged_model = Pipeline([('scaler', scaler), ('model', best_model)])
+        else:
+            logged_model = best_model
+        mlflow.sklearn.log_model(logged_model, name='model', input_example=X_test.iloc[:5])
+
+
 def main(argv: List[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Train fishing prediction models.")
     parser.add_argument(
@@ -455,6 +547,11 @@ def main(argv: List[str] | None = None) -> int:
         type=float,
         default=0.2,
         help="Test set proportion (default: 0.2)"
+    )
+    parser.add_argument(
+        "--mlflow",
+        action="store_true",
+        help="Log params, metrics, plots, and the best model to MLflow"
     )
     
     args = parser.parse_args(argv)
@@ -545,7 +642,23 @@ def main(argv: List[str] | None = None) -> int:
     }
     
     save_model(best_model_info['model'], scaler, feature_names, metadata, args.output_dir)
-    
+
+    if args.mlflow:
+        try:
+            log_to_mlflow(
+                args,
+                feature_names,
+                len(X_train),
+                len(X_test),
+                results,
+                best_model_key,
+                scaler,
+                X_test,
+                args.output_dir,
+            )
+        except Exception as exc:
+            print(f"MLflow logging skipped: {exc}")
+
     print("\n✅ Training complete!")
     print(f"   Models and plots saved to {args.output_dir}/")
     
